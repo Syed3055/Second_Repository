@@ -26,7 +26,7 @@ from pyspark.sql.functions import *
 from pyspark.sql.types import *
 
 
-# METADATA ********************
+# METADATA *******************
 
 # META {
 # META   "language": "python",

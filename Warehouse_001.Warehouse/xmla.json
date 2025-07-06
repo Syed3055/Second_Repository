@@ -514,6 +514,73 @@
         ]
       },
       {
+        "name": "family_view",
+        "sourceLineageTag": "[dbo].[family_view]",
+        "columns": [
+          {
+            "name": "person",
+            "dataType": "string",
+            "sourceColumn": "person",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "person",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "type",
+            "dataType": "string",
+            "sourceColumn": "type",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "type",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "age",
+            "dataType": "int64",
+            "sourceColumn": "age",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "age",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "family_view",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "dbo"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
         "name": "flights",
         "sourceLineageTag": "[dbo].[flights]",
         "columns": [

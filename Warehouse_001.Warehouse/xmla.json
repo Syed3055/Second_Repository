@@ -447,6 +447,116 @@
         ]
       },
       {
+        "name": "events_view",
+        "sourceLineageTag": "[dbo].[events_view]",
+        "columns": [
+          {
+            "name": "ID",
+            "dataType": "int64",
+            "sourceColumn": "ID",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "ID",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "event",
+            "dataType": "string",
+            "sourceColumn": "event",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "event",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "YEAR",
+            "dataType": "int64",
+            "sourceColumn": "YEAR",
+            "formatString": "0",
+            "sourceProviderType": "int",
+            "sourceLineageTag": "YEAR",
+            "summarizeBy": "sum",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "GOLD",
+            "dataType": "string",
+            "sourceColumn": "GOLD",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "GOLD",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "SILVER",
+            "dataType": "string",
+            "sourceColumn": "SILVER",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "SILVER",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          },
+          {
+            "name": "BRONZE",
+            "dataType": "string",
+            "sourceColumn": "BRONZE",
+            "sourceProviderType": "varchar",
+            "sourceLineageTag": "BRONZE",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              }
+            ]
+          }
+        ],
+        "partitions": [
+          {
+            "name": "{{Partition_Name}}",
+            "mode": "directLake",
+            "source": {
+              "type": "entity",
+              "entityName": "events_view",
+              "expressionSource": "DatabaseQuery",
+              "schemaName": "dbo"
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "IsTableInBiModel",
+            "value": "False"
+          }
+        ]
+      },
+      {
         "name": "family",
         "sourceLineageTag": "[dbo].[family]",
         "columns": [

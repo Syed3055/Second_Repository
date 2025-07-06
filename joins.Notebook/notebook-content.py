@@ -243,7 +243,8 @@ display(tt)
 
 # CELL ********************
 
-tt.filter(col("string_col2")=='JFFTJ').show()
+tt.filter((col("string_col2") == 'JFFTJ') | (col("string_col2") == 'AUTYD')).show()
+
 
 # METADATA ********************
 

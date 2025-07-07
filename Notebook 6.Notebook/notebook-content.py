@@ -566,9 +566,56 @@ display(g)
 
 # CELL ********************
 
-from pyspark.sql.functions import col
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 
-df.filter(col("col1").isNull() OR col("col2").isNull() OR col("col3").isNull()).show()
+# Initialize Spark session
+spark = SparkSession.builder.appName("CustomerData").getOrCreate()
+
+# Sample data
+data = [
+    (1, "Alice", "9876543210"),
+    (2, "Bob", "9123456789"),
+    (3, "Charlie", "9988776655"),
+    (4, "David", "9090909090"),
+    (5, "Eva", "8008008008"),
+    (6, "Frank", "98A76B3210"),
+    (7, "Grace", "91234X6789"),
+    (8, "Hank", "9988@76655"),
+    (9, "Ivy", "90#0909090"),
+    (10, "Jack", "8008O08008")
+]
+
+# Define schema
+schema = StructType([
+    StructField("custid", IntegerType(), True),
+    StructField("custname", StringType(), True),
+    StructField("cust_phonenumber", StringType(), True)
+])
+
+# Create DataFrame
+df = spark.createDataFrame(data, schema)
+
+# Show DataFrame
+df.show(truncate=False)
+
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+from pyspark.sql.functions import col, regexp_extract
+
+df.withColumn(
+    "newnumber",
+    regexp_extract(col("cust_phonenumber"), "^\d{10}$", 0)
+).show(truncate=False)
 
 
 # METADATA ********************

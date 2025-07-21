@@ -1,5 +1,5 @@
 {
-  "config": "{\"version\":\"5.59\",\"themeCollection\":{\"baseTheme\":{\"name\":\"CY24SU10\",\"version\":\"5.62\",\"type\":2}},\"activeSectionIndex\":0,\"defaultDrillFilterOtherVisuals\":true,\"settings\":{\"useNewFilterPaneExperience\":true,\"allowChangeFilterTypes\":true,\"useStylableVisualContainerHeader\":true,\"queryLimitOption\":6,\"useEnhancedTooltips\":true,\"exportDataMode\":1,\"useDefaultAggregateDisplayName\":true},\"objects\":{\"section\":[{\"properties\":{\"verticalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'Top'\"}}}}}]}}",
+  "config": "{\"version\":\"5.59\",\"themeCollection\":{\"baseTheme\":{\"name\":\"CY24SU10\",\"version\":\"5.62\",\"type\":2}},\"activeSectionIndex\":1,\"defaultDrillFilterOtherVisuals\":true,\"settings\":{\"useNewFilterPaneExperience\":true,\"allowChangeFilterTypes\":true,\"useStylableVisualContainerHeader\":true,\"queryLimitOption\":6,\"useEnhancedTooltips\":true,\"exportDataMode\":1,\"useDefaultAggregateDisplayName\":true},\"objects\":{\"section\":[{\"properties\":{\"verticalAlignment\":{\"expr\":{\"Literal\":{\"Value\":\"'Top'\"}}}}}]}}",
   "layoutOptimization": 0,
   "resourcePackages": [
     {
@@ -51,6 +51,36 @@
           "width": 630.04,
           "x": 0.00,
           "y": 186.31,
+          "z": 0.00
+        }
+      ],
+      "width": 1280.00
+    },
+    {
+      "config": "{}",
+      "displayName": "Page 2",
+      "displayOption": 1,
+      "filters": "[]",
+      "height": 720.00,
+      "name": "e04f93935487383d3354",
+      "ordinal": 1,
+      "visualContainers": [
+        {
+          "config": "{\"name\":\"b8f6a06e4cb114075ed3\",\"layouts\":[{\"id\":0,\"position\":{\"x\":463.9969764867856,\"y\":175.39832087033986,\"z\":1,\"width\":279.890937559053,\"height\":279.890937559053,\"tabOrder\":1}}],\"singleVisual\":{\"visualType\":\"clusteredBarChart\",\"projections\":{\"Category\":[{\"queryRef\":\"financials.Country\"}],\"Y\":[{\"queryRef\":\"Sum(financials.COGS)\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"f\",\"Entity\":\"financials\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"f\"}},\"Property\":\"Country\"},\"Name\":\"financials.Country\",\"NativeReferenceName\":\"Country\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"f\"}},\"Property\":\"COGS\"}},\"Function\":0},\"Name\":\"Sum(financials.COGS)\",\"NativeReferenceName\":\"Sum of COGS\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"f\"}},\"Property\":\"COGS\"}},\"Function\":0}}}]},\"autoSelectVisualType\":true,\"drillFilterOtherVisuals\":true}}",
+          "filters": "[]",
+          "height": 279.89,
+          "width": 279.89,
+          "x": 464.00,
+          "y": 175.40,
+          "z": 1.00
+        },
+        {
+          "config": "{\"name\":\"f86c4832814072f91d7a\",\"layouts\":[{\"id\":0,\"position\":{\"x\":54.734227789325914,\"y\":238.84026671705854,\"z\":0,\"width\":279.890937559053,\"height\":279.890937559053,\"tabOrder\":0}}],\"singleVisual\":{\"visualType\":\"clusteredBarChart\",\"projections\":{\"Category\":[{\"queryRef\":\"financials.Product\"}],\"Y\":[{\"queryRef\":\"Sum(financials.Profit)\"}]},\"prototypeQuery\":{\"Version\":2,\"From\":[{\"Name\":\"f\",\"Entity\":\"financials\",\"Type\":0}],\"Select\":[{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"f\"}},\"Property\":\"Product\"},\"Name\":\"financials.Product\",\"NativeReferenceName\":\"Product\"},{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"f\"}},\"Property\":\"Profit\"}},\"Function\":0},\"Name\":\"Sum(financials.Profit)\",\"NativeReferenceName\":\"Sum of Profit\"}],\"OrderBy\":[{\"Direction\":2,\"Expression\":{\"Aggregation\":{\"Expression\":{\"Column\":{\"Expression\":{\"SourceRef\":{\"Source\":\"f\"}},\"Property\":\"Profit\"}},\"Function\":0}}}]},\"autoSelectVisualType\":true,\"drillFilterOtherVisuals\":true}}",
+          "filters": "[]",
+          "height": 279.89,
+          "width": 279.89,
+          "x": 54.73,
+          "y": 238.84,
           "z": 0.00
         }
       ],

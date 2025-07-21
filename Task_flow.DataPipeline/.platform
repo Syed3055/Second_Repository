@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "DataPipeline",
+    "displayName": "Task_flow"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "93c997a3-8a3b-9824-46ba-32eef649fdbe"
+  }
+}

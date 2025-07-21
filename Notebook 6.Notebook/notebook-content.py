@@ -627,6 +627,594 @@ df.withColumn(
 
 # CELL ********************
 
+from datetime import date
+schema = StructType([
+    StructField("id", IntegerType(), False),
+    StructField("name", StringType(), True),
+    StructField("salary", IntegerType(), True),
+    StructField("dept", StringType(), True),
+    StructField("dob", DateType(), True),
+    StructField("manager_id", IntegerType(), True)
+])
+
+
+data = [
+    (1, "Alice", 50000, "HR", date(1990, 5, 12), 4),
+    (2, "Bob", 60000, "IT", date(1988, 8, 23), 5),
+    (3, "Charlie", 55000, "Finance", date(1991, 1, 5), 2),
+    (4, "David", 90000, "IT", date(1985, 9, 30), 3),
+    (5, "Eve", 52000, "HR", date(1992, 3, 14), None),
+    (6, "Frank", 75000, "Finance", date(1987, 12, 18), 4),
+    (7, "Grace", 81000, "IT", date(1993, 7, 1), 8),
+    (8, "Hank", 48000, "Marketing", date(1990, 10, 10), None),
+    (9, "Ivy", 59000, "HR", date(1989, 6, 27), 8),
+    (10, "Jack", 61000, "Marketing", date(1991, 11, 3), None)
+]
+gh = spark.createDataFrame(data, schema=schema)
+display(gh)
+
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+from pyspark.sql.functions import col
+
+a = gh.alias("a")
+b = gh.alias("b")
+
+result = a.join(b, on=col("a.manager_id") == col("b.id"), how="left") \
+          .select(col("a.*"), col("b.name").alias("manager_name"))
+
+
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+result.filter(result.manager_id.isNotNull())
+display(result)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col
+
+spark = SparkSession.builder.appName("MismatchExample").getOrCreate()
+
+# First DataFrame
+data1 = [
+    (1, "Alice", 50000),
+    (2, "Bob", 60000),
+    (3, "Charlie", 70000)
+]
+df1 = spark.createDataFrame(data1, ["id", "name", "salary"])
+
+# Second DataFrame
+data2 = [
+    (1, "Alice", 50000),
+    (2, "Bob", 65000),       # Salary mismatch
+    (4, "David", 70000)      # ID mismatch
+]
+
+df2 = spark.createDataFrame(data2, ["id", "name", "salary"])
+display(df1)
+display(df2)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+def find_mismatch(df1, df2, join_column):
+    joined_df = df1.alias("df1").join(df2.alias("df2"), on=join_column, how="outer")
+    mismatch_df = joined_df.filter(
+        (col("df1.name") != col("df2.name")) |
+        (col("df1.salary") != col("df2.salary")) |
+        col("df1.id").isNull() |
+        col("df2.id").isNull()
+    )
+    return mismatch_df
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+mismatches = find_mismatch(df1, df2, "id")
+mismatches.show()
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import regexp_extract
+from pyspark.sql.functions import *
+
+# Create Spark session
+spark = SparkSession.builder.appName("ExtractAfterDigits").getOrCreate()
+
+# Sample data
+data = [("ASKBHGJ45JGHG",), ("XYZ123ABC",), ("NO1234DATA",)]
+df = spark.createDataFrame(data, ["input_string"])
+
+# Regular expression to extract characters after the last digit
+# This pattern finds the last sequence of digits and captures everything after it
+df = df.withColumn("after_digits", regexp_extract("input_string", r"\d+(.*)", 1))
+
+df.show(truncate=False)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+data=[('ABSHFJFJ12QWERT12',1),('QWERT5674OTUT1',2),('DGDGNJDJ1234UYI',3)]
+df=spark.createDataFrame(data,schema="input_string string,id int")
+df.show()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+df.withColumn("newcol",regexp_extract(col("input_string"),r"\d+(.*)",1)).show()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+
+data=[(1,"Sagar-Prajapati"),(2,"Alex-John"),(3,"John Cena"),(4,"Kim Joe")]
+schema="ID int,Name string"
+dff=spark.createDataFrame(data,schema)
+display(dff)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+dff.withColumn("new",regexp_replace(col("Name"),"-",' ')).show()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, when, lit
+
+# Create Spark session
+spark = SparkSession.builder.appName("GenerateDataset").getOrCreate()
+
+# Create base data
+data = [(i, f"Name{i}") for i in range(1, 26)]
+
+# Create DataFrame
+df = spark.createDataFrame(data, ["id", "name"])
+
+# Add description column with every 5th row same as previous
+dfg = df.withColumn(
+    "description",
+    when((col("id") % 5 == 0), lit("Same as previous")).otherwise(col("name") + "_desc")
+)
+
+dfg.show(30, truncate=False)
+
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+import random
+from pyspark.sql import SparkSession
+from pyspark.sql.types import StructType, StructField, IntegerType, StringType
+
+# Create Spark session
+spark = SparkSession.builder.appName("RandomDescriptions").getOrCreate()
+
+# Function to generate random description
+def generate_random_description():
+    words = ["dude", "awesome", "spark", "data", "python", "cool", "fast", "big", "AI", "machine"]
+    return " ".join(random.choices(words, k=3))
+
+# Create data with random descriptions
+data = [(i, f"Name{i}", generate_random_description()) for i in range(1, 26)]
+
+# Define schema
+schema = StructType([
+    StructField("id", IntegerType(), True),
+    StructField("name", StringType(), True),
+    StructField("description", StringType(), True)
+])
+
+# Create DataFrame
+df = spark.createDataFrame(data, schema)
+
+df.show(30, truncate=False)
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+df.filter((col("id") % 2 == 0) & (~col("description").contains("AI"))).show()
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+data = [(1, "abc@gmail.com"), (2, "bcd@gmail.com"), (3, "abc@gmail.com")]
+schema = "ID int,email string"
+df = spark.createDataFrame(data, schema)
+display(df)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+#df.groupBy(col("email")).count().filter(col("count")==2).show()
+
+from pyspark.sql.window import *
+y =  Window.partitionBy("email").orderBy(col("ID").desc())
+f = df.withColumn("rn",row_number().over(y))
+f.filter(col("rn")==2).show()
+
+
+
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+data=[(1,'Sagar'),(2,'Alex'),(3,'John'),(4,'Kim')]
+schema="Customer_ID int, Customer_Name string"
+df_customer=spark.createDataFrame(data,schema)
+
+data=[(1,4),(3,2)]
+schema="Order_ID int, Customer_ID int"
+df_order=spark.createDataFrame(data,schema)
+display(df_customer)
+display(df_order)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+df_customer.join(df_order, on='Customer_ID', how='left_anti').show()
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+data=[('Genece' , 2 , 75000),
+('𝗝𝗮𝗶𝗺𝗶𝗻' , 2 , 80000 ),
+('𝗣𝗮𝗻𝗸𝗮𝗷' , 2 , 80000 ),
+('Tarvares' , 2 , 70000),
+('Marlania' , 4 , 70000),
+('Briana' , 4 , 85000),
+('𝗞𝗶𝗺𝗯𝗲𝗿𝗹𝗶' , 4 , 55000),
+('𝗚𝗮𝗯𝗿𝗶𝗲𝗹𝗹𝗮' , 4 , 55000),  
+('Lakken', 5, 60000),
+('Latoynia' , 5 , 65000) ]
+schema="emp_name string,dept_id int,salary int"
+df=spark.createDataFrame(data,schema)
+display(df)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+from pyspark.sql.functions import col, max, min
+
+df.groupBy("dept_id").agg(
+    max(col("salary")).alias("mx_sal"),
+    min(col("salary")).alias("min_sal")
+).show()
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import col, isnan, when, count
+
+# Create Spark session
+spark = SparkSession.builder.appName("NullPercentage").getOrCreate()
+
+# Sample data with null values
+data = [
+    (None, "A", "X", None, "P"),
+    ("B", None, "Y", None, "Q"),
+    ("C", "D", None, None, "R"),
+    (None, "E", "Z", None, "S"),
+    ("F", "G", None, None, "T"),
+    ("H", "I", "W", None, "U"),
+    ("J", "K", "V", None, "V"),
+    ("L", "M", "U", "N", "W"),
+    ("M", "N", "T", "O", "X"),
+    ("N", "O", "S", "P", "Y")
+]
+
+columns = ["col1", "col2", "col3", "col4", "col5"]
+
+# Create DataFrame
+df = spark.createDataFrame(data, columns)
+
+# Total number of rows
+total_rows = df.count()
+
+# Calculate null percentages
+null_percentages = df.select([
+    (count(when(col(c).isNull(), c)) / total_rows * 100).alias(c + "_null_pct")
+    for c in df.columns
+])
+
+null_percentages.show()
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+display(df)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+nul = df.select([
+    (count(when(col(c).isNull(), c)).alias("Null_count")) for c in df.columns])
+
+display(nul)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import from_json, col
+from pyspark.sql.types import StructType, StringType
+
+# Create Spark session (only needed if you're running this outside a notebook)
+spark = SparkSession.builder.appName("ExtractJSON").getOrCreate()
+
+# Sample data
+data = [
+    ('John Doe', '{"street": "123 Main St", "city": "Anytown"}'),
+    ('Jane Smith', '{"street": "456 Elm St", "city": "Othertown"}')
+]
+
+# Create initial DataFrame
+df = spark.createDataFrame(data, schema="name string, address string")
+
+# Define schema for JSON parsing
+address_schema = StructType() \
+    .add("street", StringType()) \
+    .add("city", StringType())
+
+# Parse JSON and extract fields
+df_parsed = df.withColumn("address_json", from_json(col("address"), address_schema))
+df_final = df_parsed.select(
+    col("name"),
+    col("address_json.street").alias("street"),
+    col("address_json.city").alias("city")
+)
+
+# Display the final DataFrame
+display(df_final)
+
+
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+address_schema = StructType() \
+    .add("street", StringType()) \
+    .add("city", StringType())
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+data = [
+ (1, ),
+ (2,),
+ (3,),
+ (6,),
+ (7,),
+ (8,)]
+schema="Id int"
+df = spark.createDataFrame(data,schema=schema)
+display(df)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+from pyspark.sql.functions import *
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+df_list = df.select(min(col("Id")).alias("min"), max(col("Id")).alias("maxid"))
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+df_new = spark.range(df_list.first()[0],df_list.first()[1]+1)
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# CELL ********************
+
+(df_new)
 
 # METADATA ********************
 
